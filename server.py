@@ -18,4 +18,9 @@ def send():
 def get_messages():
     return {"messages": messages}
 
+@app.route("/clear", methods=["POST"])
+def clear():
+    messages.clear()
+    return {"status": "cleared"}
+
 app.run(host="0.0.0.0", port=8080)
