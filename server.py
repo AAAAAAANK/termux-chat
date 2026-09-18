@@ -18,7 +18,7 @@ def send():
 def get_messages():
     return {"messages": messages}
 
-@app.route("/clear")
+@app.route("/clear", methods=["POST"])
 def clear():
     messages.clear()
     return {"status": "cleared"}
