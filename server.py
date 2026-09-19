@@ -30,6 +30,12 @@ def uploadupdate():
 def download_update():
     return {"update": update}
 
+@app.route("/clearupdate")
+def clear_update():
+    update.clear
+    return {"status": "cleared"}
+    
+
 @app.route("/clear", methods=["POST"])
 def clear():
     messages.clear()
