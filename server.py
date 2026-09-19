@@ -28,7 +28,7 @@ def uploadupdate():
 
 @app.route("/getupdate")
 def download_update():
-    return {"update": "update"}
+    return {"update": update}
 
 @app.route("/clear", methods=["POST"])
 def clear():
