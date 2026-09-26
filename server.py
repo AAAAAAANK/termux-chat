@@ -32,7 +32,7 @@ def download_update():
 
 @app.route("/clearupdate")
 def clear_update():
-    update.clear
+    update.clear()
     return {"status": "cleared"}
     
 
