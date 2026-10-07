@@ -14,7 +14,7 @@ def getuser():
     secret_ID = request.json["ID_niemandem_verraten"]
     if hashlib.sha256(secret_ID.encode()).hexdigest() == "HIERFÜGEICHSPÄTERELIASHASHEIN":
         return send("ELIA: ")
-    elif hashlib.sha256(secret_ID.encode()).hexdigest() == "HIERFÜGEICHSPÄTERMEINENHASHEIN":
+    elif hashlib.sha256(secret_ID.encode()).hexdigest() == "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08":
         return send("LEON :")
     else:
         return {"status": "invalid ID"}
