@@ -1,4 +1,5 @@
 from flask import Flask, request
+import hashlib
 
 app = Flask(__name__)
 
@@ -9,9 +10,17 @@ def home():
     return "Termux Chat Server läuft!"
 
 @app.route("/send", methods=["POST"])
-def send():
+def getuser():
+    secret_ID = request.json["ID_niemandem_verraten"]
+    if hashlib.sha256(secret_ID.encode()).hexdigest() == "HIERFÜGEICHSPÄTERELIASHASHEIN":
+        return send("ELIA: ")
+    elif hashlib.sha256(secret_ID.encode()).hexdigest() == "HIERFÜGEICHSPÄTERMEINENHASHEIN":
+        return send("LEON :")
+    else:
+        return {"status": "invalid ID"}
+def send(user):
     message = request.json["message"]
-    messages.append(message)
+    messages.append(user + message)
     return {"status": "ok"}
 
 @app.route("/messages")
