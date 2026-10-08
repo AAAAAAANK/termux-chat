@@ -12,7 +12,7 @@ def home():
 @app.route("/send", methods=["POST"])
 def getuser():
     secret_ID = request.json["ID_niemandem_verraten"]
-    if hashlib.sha256(secret_ID.encode()).hexdigest() == "HIERFÜGEICHSPÄTERELIASHASHEIN":
+    if hashlib.sha256(secret_ID.encode()).hexdigest() == "f296cd5057b67f27a2ffd4a113819366d2aaca7b65b146805a011a733d512d8c":
         return send("ELIA: ")
     elif hashlib.sha256(secret_ID.encode()).hexdigest() == "9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08":
         return send("LEON :")
