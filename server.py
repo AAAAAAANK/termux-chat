@@ -1,20 +1,32 @@
 from flask import Flask, request
+import os
 import hashlib
-import sqlite3
+import psycopg2
 
 app = Flask(__name__)
 
 messages = []
 update = []
 def get_db():
-    return sqlite3.connect("chat.db")
-with get_db() as db:
-    db.execute("""
-        CREATE TABLE IF NOT EXISTS messages (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            message TEXT NOT NULL
-        )
-    """)
+    return psycopg2.connect(os.environ["DATABASE_URL"])
+    
+def init_db():
+    db = get_db()
+    try:
+        cur = db.cursor()
+        cur.execute("""
+            CREATE TABLE IF NOT EXISTS messages (
+                id SERIAL PRIMARY KEY,
+                message TEXT NOT NULL
+            )
+        """)
+        db.commit()
+        cur.close()
+    finally:
+        db.close()
+
+
+init_db()
 @app.route("/")
 def home():
     return "Termux Chat Server läuft!"
@@ -32,24 +44,32 @@ def getuser():
 def send(user):
     message = request.json["message"]
 
-    with get_db() as db:
-        db.execute(
-            "INSERT INTO messages (message) VALUES (?)",
+    db = get_db()
+    try:
+        cur = db.cursor()
+        cur.execute(
+            "INSERT INTO messages (message) VALUES (%s)",
             (user + message,)
         )
+        db.commit()
+        cur.close()
+    finally:
+        db.close()
 
     return {"status": "ok"}
 
-
 @app.route("/messages")
 def get_messages():
-    with get_db() as db:
-        rows = db.execute(
-            "SELECT message FROM messages ORDER BY id"
-        ).fetchall()
+    db = get_db()
+    try:
+        cur = db.cursor()
+        cur.execute("SELECT message FROM messages ORDER BY id")
+        rows = cur.fetchall()
+        cur.close()
+    finally:
+        db.close()
 
     return {"messages": [row[0] for row in rows]}
-    
 
 @app.route("/sendupdate", methods=["POST"])
 def uploadupdate():
