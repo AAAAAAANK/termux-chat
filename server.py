@@ -1,10 +1,20 @@
 from flask import Flask, request
 import hashlib
+import sqlite3
 
 app = Flask(__name__)
 
 messages = []
 update = []
+def get_db():
+    return sqlite3.connect("chat.db")
+with get_db() as db:
+    db.execute("""
+        CREATE TABLE IF NOT EXISTS messages (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            message TEXT NOT NULL
+        )
+    """)
 @app.route("/")
 def home():
     return "Termux Chat Server läuft!"
@@ -18,14 +28,28 @@ def getuser():
         return send("LEON :")
     else:
         return {"status": "invalid ID"}
+    
 def send(user):
     message = request.json["message"]
-    messages.append(user + message)
+
+    with get_db() as db:
+        db.execute(
+            "INSERT INTO messages (message) VALUES (?)",
+            (user + message,)
+        )
+
     return {"status": "ok"}
+
 
 @app.route("/messages")
 def get_messages():
-    return {"messages": messages}
+    with get_db() as db:
+        rows = db.execute(
+            "SELECT message FROM messages ORDER BY id"
+        ).fetchall()
+
+    return {"messages": [row[0] for row in rows]}
+    
 
 @app.route("/sendupdate", methods=["POST"])
 def uploadupdate():
