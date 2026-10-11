@@ -59,14 +59,6 @@ def send(user):
     return {"status": "ok"}
 
 @app.route("/messages")
-def getuser2():
-    secret_ID = request.json["ID_niemandem_verraten"]
-    hashedpass = hashlib.sha256(secret_ID.encode()).hexdigest()
-    if hashedpass == "fa11ad671d9e65ad24534a757d57ec102a1bb8630e9730076605712131cd51f5" or hashedpass == "92746b8ba4a454fa658a966d7c216144fa3845ed362ffc0f109454f96bbf8db3":
-        return get_messages()
-    else:
-        return {"status": "invalid ID"}
-
 def get_messages():
     db = get_db()
     try:
