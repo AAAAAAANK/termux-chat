@@ -36,7 +36,7 @@ def getuser():
     secret_ID = request.json["ID_niemandem_verraten"]
     if hashlib.sha256(secret_ID.encode()).hexdigest() == "fa11ad671d9e65ad24534a757d57ec102a1bb8630e9730076605712131cd51f5":
         return send("ELIA: ")
-    elif hashlib.sha256(secret_ID.encode()).hexdigest() == "92746b8ba4a454fa658a966d7c216144fa3845ed362ffc0f109454f96bbf8db3":
+    elif hashlib.sha256(secret_ID.encode()).hexdigest() == "49ca5d73899213a0b49e3963cb766e80aed929eca078b298624ad4f354e4b2eb":
         return send("LEON :")
     else:
         return {"status": "invalid ID"}
