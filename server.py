@@ -31,13 +31,17 @@ init_db()
 def home():
     return "Termux Chat Server läuft!"
 
+@app.route("/test")
+def home2():
+    return "Ja du bist ein schibidi"
+
 @app.route("/send", methods=["POST"])
 def getuser():
     secret_ID = request.json["ID_niemandem_verraten"]
     if hashlib.sha256(secret_ID.encode()).hexdigest() == "d0bd9cdbc9a7515a48d31a7ec333b19380bfe3b24f74e0f8f49c875d3a5d4170":
         return send("ELIA: ")
     elif hashlib.sha256(secret_ID.encode()).hexdigest() == "f17cedf84e97d5f67df8d010e99ea5c8588c48b2a79baf1156e86720a60b6016":
-        return send("LEON :")
+        return send("LEON(der schibidinatoer) :")
     else:
         return {"status": "invalid ID"}
     
